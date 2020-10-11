@@ -1,6 +1,7 @@
 const db = require("../data/dbConfig");
 
 module.exports = {
+  getAll,
   getById,
   getBy,
   add,
@@ -8,7 +9,13 @@ module.exports = {
   remove,
   getUserComments,
   getUserFavorites,
+  addFavorite,
+  removeFavorite,
 };
+
+function getAll() {
+  return db("users");
+}
 
 function getById(id) {
   return db("users").where({ id }).first();
@@ -57,4 +64,12 @@ function getUserComments(user_id) {
 
 function getUserFavorites(user_id) {
   return db("user_favorites").where({ user_id }).orderBy("id", "desc");
+}
+
+function addFavorite(user_id, game_id) {
+  return db("user_favorites").insert({ user_id, game_id });
+}
+
+function removeFavorite(user_id, game_id) {
+  return db("user_favorites").where({ user_id, game_id }).del();
 }
