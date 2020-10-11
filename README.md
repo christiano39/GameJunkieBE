@@ -8,23 +8,24 @@ Base URL for deployed API:
 
 # **Endpoints**
 
-| Method | URL                        | Description                          | Requires Token | Requires Admin |
-| ------ | -------------------------- | ------------------------------------ | -------------- | -------------- |
-| POST   | /api/auth/register         | register a new user                  | -              | -              |
-| POST   | /api/auth/login            | login as existing user               | -              | -              |
-| POST   | /api/my/favorites          | add a game to your favorites         | X              | -              |
-| POST   | /api/my/comments           | post a comment on a game             | X              | -              |
-| POST   | /api/users                 | create a user                        | X              | X              |
-| GET    | /api/my/favorites          | gets a list of favorites for user    | X              | -              |
-| GET    | /api/my/comments           | gets a list of user's comments       | X              | -              |
-| GET    | /api/users/                | gets a list of all users             | X              | X              |
-| GET    | /api/users/:id             | gets a user by id                    | X              | X              |
-| GET    | /api/users/:id/comments    | gets a list of user's comments       | X              | X              |
-| PUT    | /api/users/:id             | edits a user                         | X              | X              |
-| DELETE | /api/comments/:id          | gets a comment by id                 | X              | X              |
-| DELETE | /api/my/favorites/:game_id | removes a game from user's favorites | X              | -              |
-| DELETE | /api/my/comments/:id       | removes a comment from user          | X              | -              |
-| DELETE | /api/users/:id             | deletes a user                       | X              | X              |
+| Method | URL                        | Description                            | Requires Token | Requires Admin |
+| ------ | -------------------------- | -------------------------------------- | -------------- | -------------- |
+| POST   | /api/auth/register         | register a new user                    | -              | -              |
+| POST   | /api/auth/login            | login as existing user                 | -              | -              |
+| POST   | /api/my/favorites          | add a game to your favorites           | X              | -              |
+| POST   | /api/my/comments           | post a comment on a game               | X              | -              |
+| POST   | /api/users                 | create a user                          | X              | X              |
+| GET    | /api/my/favorites          | gets a list of favorites for user      | X              | -              |
+| GET    | /api/my/comments           | gets a list of user's comments         | X              | -              |
+| GET    | /api/games/:id/comments    | gets a list of all comments for a game | -              | -              |
+| GET    | /api/users/                | gets a list of all users               | X              | X              |
+| GET    | /api/users/:id             | gets a user by id                      | X              | X              |
+| GET    | /api/users/:id/comments    | gets a list of user's comments         | X              | X              |
+| PUT    | /api/users/:id             | edits a user                           | X              | X              |
+| DELETE | /api/comments/:id          | gets a comment by id                   | X              | X              |
+| DELETE | /api/my/favorites/:game_id | removes a game from user's favorites   | X              | -              |
+| DELETE | /api/my/comments/:id       | removes a comment from user            | X              | -              |
+| DELETE | /api/users/:id             | deletes a user                         | X              | X              |
 
 # **Table Requirements**
 
@@ -57,3 +58,332 @@ Base URL for deployed API:
 # **Requests and Returns**
 
 ## POST /api/auth/register
+
+Request body:
+
+```
+{
+    "username": "christian",
+    "password": "password"
+}
+```
+
+Returns:
+
+```
+{
+    "message": "User registered successfully",
+    "user": {
+        "id": 5,
+        "username": "christian",
+        "password": "$2a$08$fUxIKrBP6EMpsYWKFUWbR./bVpRJKsjpe9Actn1bnmKJzPy0NqqTO",
+        "admin": false
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijo1LCJ1c2VybmFtZSI6ImNocmlzdGlhbjIiLCJhZG1pbiI6MCwiaWF0IjoxNjAyNDU2Nzg5LCJleHAiOjE2MDMzMjA3ODl9.DPPOVCK5IHTo2DuSzB4uezeX8J44JlTKGUPY9m195Aw"
+}
+```
+
+## POST /api/auth/login
+
+Request body:
+
+```
+{
+    "username": "christian",
+    "password": "password"
+}
+```
+
+Returns:
+
+```
+{
+    "welcome": "christian",
+    "user": {
+        "id": 5,
+        "username": "christian",
+        "password": "$2a$08$fUxIKrBP6EMpsYWKFUWbR./bVpRJKsjpe9Actn1bnmKJzPy0NqqTO",
+        "admin": false
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijo1LCJ1c2VybmFtZSI6ImNocmlzdGlhbjIiLCJhZG1pbiI6MCwiaWF0IjoxNjAyNDU2Nzg5LCJleHAiOjE2MDMzMjA3ODl9.DPPOVCK5IHTo2DuSzB4uezeX8J44JlTKGUPY9m195Aw"
+}
+```
+
+## POST /api/my/favorites
+
+Request body:
+
+```
+{
+    "game_id": 6
+}
+```
+
+Returns:
+
+```
+{
+    "message": "Favorited"
+}
+```
+
+## POST /api/my/comments
+
+Request body:
+
+```
+{
+    "game_id": 6,
+    "comment": "Great game"
+}
+```
+
+Returns:
+
+```
+{
+    "comment": {
+        "id": 3,
+        "user_id": 1,
+        "game_id": 6,
+        "comment": "Great game"
+    }
+}
+```
+
+## POST /api/users
+
+Request body:
+
+```
+{
+    "username": "test_user3",
+    "password": "password",
+    "admin": true
+}
+```
+
+Returns:
+
+```
+{
+    "message": "User created successfully",
+    "user": {
+        "id": 6,
+        "username": "test_user3",
+        "password": "$2a$08$2MkCPI20waNj4CM88lp3oeYCF95FEtIu7SVDynvZghEvUDXT411tK",
+        "admin": true
+    }
+}
+```
+
+## GET /api/my/favorites
+
+Returns:
+
+```
+{
+    "favorites": [
+        {
+            "id": 5,
+            "user_id": 1,
+            "game_id": 6
+        },
+        {
+            "id": 4,
+            "user_id": 1,
+            "game_id": 4
+        },
+        {
+            "id": 3,
+            "user_id": 1,
+            "game_id": 3
+        }
+    ]
+}
+```
+
+## GET /api/my/comments
+
+Returns:
+
+```
+{
+    "comments": [
+        {
+            "id": 3,
+            "user_id": 1,
+            "game_id": 6,
+            "comment": "Great game"
+        },
+        {
+            "id": 2,
+            "user_id": 1,
+            "game_id": 1,
+            "comment": "Great game"
+        },
+        {
+            "id": 1,
+            "user_id": 1,
+            "game_id": 4,
+            "comment": "Hello"
+        }
+    ]
+}
+```
+
+## GET /api/games/:id/comments
+
+Returns:
+
+```
+{
+    "comments": [
+        {
+            "id": 2,
+            "user_id": 1,
+            "author": "Chris",
+            "comment": "Great game"
+        }
+    ]
+}
+```
+
+## GET /api/users
+
+Returns:
+
+```
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "Chris",
+            "password": "$2a$08$pk4OoYQG2dVIIqyqoBEZYuLiqcrmmQNUqwUoIrKft1kwmGuLzjUIK",
+            "admin": true
+        },
+        {
+            "id": 2,
+            "username": "test_user",
+            "password": "$2a$08$RAMukb0DbO2IRe7TY11G3OfmXjrz2M2oeF3yI6Lff7.HZzaKpOtIa",
+            "admin": false
+        },
+        {
+            "id": 3,
+            "username": "test_user1",
+            "password": "$2a$08$ff27cdSznIs2Z83TXcu.E.KKv3Fn8vPcFewyObZ6Ge5iTbXrMkTTm",
+            "admin": false
+        }
+    ]
+}
+```
+
+## GET /api/users/:id
+
+Returns:
+
+```
+{
+    "user": {
+        "id": 2,
+        "username": "test_user",
+        "password": "$2a$08$RAMukb0DbO2IRe7TY11G3OfmXjrz2M2oeF3yI6Lff7.HZzaKpOtIa",
+        "admin": 0
+    }
+}
+```
+
+## GET /api/users/:id/comments
+
+Returns:
+
+```
+{
+    "comments": [
+        {
+            "id": 3,
+            "user_id": 1,
+            "game_id": 6,
+            "comment": "Great game"
+        },
+        {
+            "id": 2,
+            "user_id": 1,
+            "game_id": 1,
+            "comment": "Great game"
+        },
+        {
+            "id": 1,
+            "user_id": 1,
+            "game_id": 4,
+            "comment": "Hello"
+        }
+    ]
+}
+```
+
+## PUT /api/users/:id
+
+Request body:
+
+```
+{
+    "username": "test_user",
+    "password": "password",
+    "admin": false
+}
+```
+
+Returns:
+
+```
+{
+    "message": "User with id 2 updated successfully",
+    "user": {
+        "id": 2,
+        "username": "test_user",
+        "password": "$2a$08$0BKRfyVYhraMHj4mablt7emry0QKK854YqLgfSYemfFScJjzGL75W",
+        "admin": false
+    }
+}
+```
+
+## DELETE /api/comments/:id
+
+Returns:
+
+```
+204 No Content
+```
+
+## DELETE /api/my/favorites/:game_id
+
+Returns:
+
+```
+204 No Content
+```
+
+## DELETE /api/my/comments/:id
+
+Returns:
+
+```
+204 No Content
+```
+
+## DELETE /api/users/:id
+
+Returns:
+
+```
+{
+    "message": "User with id 5 deleted successfully",
+    "deletedUser": {
+        "id": 5,
+        "username": "christian2",
+        "password": "$2a$08$fUxIKrBP6EMpsYWKFUWbR./bVpRJKsjpe9Actn1bnmKJzPy0NqqTO",
+        "admin": false
+    }
+}
+```
