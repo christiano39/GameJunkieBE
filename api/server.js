@@ -7,6 +7,7 @@ const usersRoutes = require("../users/usersRoutes");
 const commentsRoutes = require("../comments/commentsRoutes");
 const personalRoutes = require("../users/personalRoutes");
 const gameCommentsRoutes = require("../comments/gameCommentsRoutes");
+const gamesRoutes = require("../games/gamesRoutes");
 
 const {
   requiresToken,
@@ -23,6 +24,7 @@ server.use("/api/auth", authRoutes);
 server.use("/api/users", requiresToken, requiresAdmin, usersRoutes);
 server.use("/api/comments", requiresToken, requiresAdmin, commentsRoutes);
 server.use("/api/my", requiresToken, personalRoutes);
-server.use("/api/games", gameCommentsRoutes);
+server.use("/api/game", gameCommentsRoutes);
+server.use("/api/games", gamesRoutes);
 
 module.exports = server;
